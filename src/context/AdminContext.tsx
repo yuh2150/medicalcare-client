@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
 import { AdminUser, AdminLoginRequest, Permission, UserRole } from '../types/admin';
-import { adminApi, AdminTokenManager } from '../api/adminApi';
+import { adminApi, AdminTokenManager } from '../services/adminApi';
 import { useAuth } from './AuthContext';
 
 // Admin State

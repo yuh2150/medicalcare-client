@@ -1,23 +1,22 @@
-import { HeroBanner, SearchBar } from '@/components/HomePage';
-import { HomeContent } from '@/components/HomeContent';
+import { HomeContent } from '@/components/home';
 
-// SEO Metadata
+// SEO Metadata cho WebMedical
 export const metadata = {
-  title: 'Medical Care – Sức khỏe của bạn là ưu tiên của chúng tôi',
-  description: 'Khám chuyên khoa, đặt lịch bác sĩ, mua thuốc và đọc tin sức khỏe mới nhất tại Medical Care.',
-  keywords: 'bác sĩ, chuyên khoa, khám bệnh, sức khỏe, y tế, đặt lịch khám',
+  title: 'WebMedical – Sức Khỏe Của Bạn, Ưu Tiên Của Chúng Tôi',
+  description: 'Trải nghiệm dịch vụ chăm sóc sức khỏe đẳng cấp thế giới với đội ngũ chuyên gia y tế tận tâm. Đặt lịch khám, tìm bác sĩ chuyên khoa và tiếp cận các dịch vụ y tế toàn diện.',
+  keywords: 'chăm sóc y tế, sức khỏe, bác sĩ, chuyên khoa, đặt lịch khám, bệnh viện, phòng khám, dịch vụ y tế',
   openGraph: {
-    title: 'Medical Care – Sức khỏe của bạn là ưu tiên của chúng tôi',
-    description: 'Khám chuyên khoa, đặt lịch bác sĩ, mua thuốc và đọc tin sức khỏe mới nhất tại Medical Care.',
-    images: ['/images/og-home.jpg'],
+    title: 'WebMedical – Sức Khỏe Của Bạn, Ưu Tiên Của Chúng Tôi',
+    description: 'Trải nghiệm dịch vụ chăm sóc sức khỏe đẳng cấp thế giới với đội ngũ chuyên gia y tế tận tâm.',
+    images: ['/images/og-webmedical.jpg'],
     type: 'website',
     locale: 'vi_VN',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Medical Care – Sức khỏe của bạn là ưu tiên của chúng tôi',
-    description: 'Khám chuyên khoa, đặt lịch bác sĩ, mua thuốc và đọc tin sức khỏe mới nhất tại Medical Care.',
-    images: ['/images/og-home.jpg'],
+    title: 'WebMedical – Sức Khỏe Của Bạn, Ưu Tiên Của Chúng Tôi',
+    description: 'Trải nghiệm dịch vụ chăm sóc sức khỏe đẳng cấp thế giới với đội ngũ chuyên gia y tế tận tâm.',
+    images: ['/images/og-webmedical.jpg'],
   },
   robots: {
     index: true,
@@ -30,15 +29,9 @@ export const metadata = {
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Banner - Static content for better initial load */}
-      <HeroBanner />
-      
-      {/* Search Bar - Static content */}
-      <SearchBar />
-      
-      {/* Dynamic content with loading states */}
+    <main className="min-h-screen">
+      {/* All sections are now handled in HomeContent component */}
       <HomeContent />
-    </div>
+    </main>
   );
 }

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import ImagesPage from '@/pages/admin/ImagesPage';
+import { ImagesPage } from '@/components/admin';
 
 // Mock user cho testing
 const mockUser = {

@@ -1,5 +1,5 @@
 import ProtectedRoute from '@/routes/ProtectedRoute';
-import UserProfile from '@/components/UserProfile';
+import { UserProfile } from '@/components/auth';
 
 export default function Profile() {
   return (

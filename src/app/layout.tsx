@@ -1,23 +1,48 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Header, Footer } from "@/components/Layout";
+import { Inter, Poppins } from "next/font/google";
+import { Header, Footer } from "@/components/layout";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Medical Care",
-  description: "Sức khỏe của bạn là ưu tiên của chúng tôi",
-  metadataBase: new URL("https://yourdomain.com"),
+  title: {
+    default: "WebMedical – Your Health, Our Priority",
+    template: "%s | WebMedical"
+  },
+  description: "Experience world-class healthcare with our team of dedicated medical professionals. Your wellness journey starts here.",
+  metadataBase: new URL("https://webmedical.com"),
+  keywords: ["healthcare", "medical services", "doctors", "appointments", "hospital", "clinic"],
+  authors: [{ name: "WebMedical Team" }],
+  creator: "WebMedical",
+  publisher: "WebMedical",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/icon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon-180x180.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -26,13 +51,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-white text-gray-900`}
       >
         <AuthProvider>
           <Header />
-          {children}
+          <main className="min-h-screen">
+            {children}
+          </main>
           <Footer />
         </AuthProvider>
       </body>

@@ -5,17 +5,19 @@ import { useRouter, usePathname } from 'next/navigation';
 import { AdminProvider } from '@/context/AdminContext';
 import AdminProtectedRoute from '@/components/admin/AdminProtectedRoute';
 import AdminLayout from '@/components/admin/AdminLayout';
-import AdminLoginPage from '@/pages/admin/AdminLoginPage';
 import AdminDashboard from '@/components/admin/AdminDashboard';
-import UsersPage from '@/pages/admin/UsersPage';
-import DoctorsPage from '@/pages/admin/DoctorsPage';
-import SpecialistsPage from '@/pages/admin/SpecialistsPage';
-import PlansPage from '@/pages/admin/PlansPage';
-import AppointmentsPage from '@/pages/admin/AppointmentsPage';
-import OrdersPage from '@/pages/admin/OrdersPage';
-import NewsPage from '@/pages/admin/NewsPage';
-import ImagesPage from '@/pages/admin/ImagesPage';
-import AuditLogsPage from '@/pages/admin/AuditLogsPage';
+import { 
+  AdminLoginPage,
+  UsersPage,
+  DoctorsPage,
+  SpecialistsPage,
+  PlansPage,
+  AppointmentsPage,
+  OrdersPage,
+  NewsPage,
+  ImagesPage,
+  AuditLogsPage
+} from '@/components/admin';
 
 export default function AdminApp() {
   const pathname = usePathname();

@@ -2,10 +2,10 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { AuthState, AuthContextType, LoginRequest, RegisterRequest, User } from '../types/auth';
-import { userAuthApi } from '../api/userAuthApi';
-import { TokenManager } from '../api/config';
+import { userAuthApi } from '../services/userAuthApi';
+import { TokenManager } from '../services/config';
 
-// Action types for reducer
+// Các loại hành động cho reducer
 type AuthAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'LOGIN_SUCCESS'; payload: { user: User; accessToken: string; refreshToken: string } }
@@ -13,7 +13,7 @@ type AuthAction =
   | { type: 'UPDATE_USER'; payload: User }
   | { type: 'SET_TOKENS'; payload: { accessToken: string; refreshToken: string } };
 
-// Initial state
+// Trạng thái ban đầu
 const initialState: AuthState = {
   user: null,
   accessToken: null,
@@ -22,7 +22,7 @@ const initialState: AuthState = {
   isLoading: true,
 };
 
-// Auth reducer
+// Auth reducer - Bộ xử lý trạng thái xác thực
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case 'SET_LOADING':
@@ -64,16 +64,16 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   }
 };
 
-// Create context
+// Tạo context xác thực
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Auth Provider component
+// Component cung cấp xác thực
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Khởi tạo auth state từ localStorage khi app load
   useEffect(() => {
-    // Skip initialization on server side
+    // Bỏ qua khởi tạo ở phía server
     if (typeof window === 'undefined') {
       return;
     }
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const refreshToken = TokenManager.getRefreshToken();
 
         if (accessToken && refreshToken) {
-          // Có token, cố gắng lấy thông tin user
+          // Có token, cố gắng lấy thông tin người dùng
           try {
             const user = await userAuthApi.getProfile();
             dispatch({
@@ -92,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               payload: { user, accessToken, refreshToken },
             });
           } catch (error) {
-            // Token không hợp lệ, clear tokens
+            // Token không hợp lệ, xóa tokens
             TokenManager.clearTokens();
             dispatch({ type: 'SET_LOADING', payload: false });
           }
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           dispatch({ type: 'SET_LOADING', payload: false });
         }
       } catch (error) {
-        console.error('Error initializing auth:', error);
+        console.error('Lỗi khởi tạo xác thực:', error);
         dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
@@ -108,7 +108,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     initializeAuth();
   }, []);
 
-  // Login function
+  // Hàm đăng nhập
   const login = async (credentials: LoginRequest): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
@@ -129,7 +129,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Register function
+  // Hàm đăng ký
   const register = async (userData: RegisterRequest): Promise<void> => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
@@ -150,27 +150,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Logout function
+  // Hàm đăng xuất
   const logout = async (): Promise<void> => {
     try {
-      // Gọi API logout để invalidate token trên server
+      // Gọi API đăng xuất để vô hiệu hóa token trên server
       await userAuthApi.logout();
     } catch (error) {
-      // Nếu API logout thất bại, vẫn logout ở client
-      console.error('Logout API error:', error);
+      // Nếu API đăng xuất thất bại, vẫn đăng xuất ở client
+      console.error('Lỗi API đăng xuất:', error);
     } finally {
-      // Clear tokens và reset state
+      // Xóa tokens và reset trạng thái
       TokenManager.clearTokens();
       dispatch({ type: 'LOGOUT' });
     }
   };
 
-  // Refresh tokens function
+  // Hàm làm mới tokens
   const refreshTokens = async (): Promise<void> => {
     try {
       const currentRefreshToken = TokenManager.getRefreshToken();
       if (!currentRefreshToken) {
-        throw new Error('No refresh token available');
+        throw new Error('Không có refresh token khả dụng');
       }
 
       const response = await userAuthApi.refreshToken(currentRefreshToken);
@@ -182,19 +182,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         payload: { accessToken, refreshToken },
       });
     } catch (error) {
-      // Refresh token hết hạn, logout user
+      // Refresh token hết hạn, đăng xuất người dùng
       await logout();
       throw error;
     }
   };
 
-  // Update profile function
+  // Hàm cập nhật hồ sơ
   const updateProfile = async (): Promise<void> => {
     try {
       const user = await userAuthApi.getProfile();
       dispatch({ type: 'UPDATE_USER', payload: user });
     } catch (error) {
-      console.error('Error updating profile:', error);
+      console.error('Lỗi cập nhật hồ sơ:', error);
       throw error;
     }
   };
@@ -219,7 +219,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    // For SSR, return a default state instead of throwing error
+    // Đối với SSR, trả về trạng thái mặc định thay vì throw error
     if (typeof window === 'undefined') {
       return {
         ...initialState,
@@ -230,7 +230,7 @@ export const useAuth = (): AuthContextType => {
         updateProfile: async () => {},
       };
     }
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth phải được sử dụng trong AuthProvider');
   }
   return context;
 };

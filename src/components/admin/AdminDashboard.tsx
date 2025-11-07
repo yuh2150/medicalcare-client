@@ -25,7 +25,7 @@ import {
   Activity,
   Clock
 } from 'lucide-react';
-import { adminApi } from '../../api/adminApi';
+import { adminApi } from '../../services/adminApi';
 import { DashboardStats, ChartData, Activity as ActivityType } from '../../types/admin';
 import { format } from 'date-fns';
 
