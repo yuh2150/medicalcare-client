@@ -6,8 +6,12 @@ import Link from 'next/link';
 import { ArrowLeft, Calendar, Users, Star, Phone, MapPin, Clock } from 'lucide-react';
 import { Container, Section, Breadcrumb } from '../layout';
 import { Button, ErrorMessage, Badge } from '../ui';
-import { specialistApi } from '@/services';
+import { HTMLContent } from '../ui/HTMLContent';
+import { DoctorCard } from '../doctors/DoctorCard';
+import { specialistApi, doctorApi } from '@/services';
+import { normalizeId, normalizeIds } from '@/lib/utils';
 import type { Specialty } from '@/types/specialist';
+import type { Doctor } from '@/types';
 
 interface SpecialistDetailPageProps {
   specialistId: string;
@@ -15,7 +19,9 @@ interface SpecialistDetailPageProps {
 
 export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps) {
   const [specialist, setSpecialist] = useState<Specialty | null>(null);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [doctorsLoading, setDoctorsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const breadcrumbItems = [
@@ -26,6 +32,7 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
 
   useEffect(() => {
     fetchSpecialistDetail();
+    fetchDoctorsBySpecialty();
   }, [specialistId]);
 
   const fetchSpecialistDetail = async () => {
@@ -35,15 +42,11 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
       
       const result = await specialistApi.getSpecialistById(specialistId);
       
-      // Handle MongoDB _id mapping
-      const transformedResult = {
+      // Normalize IDs for compatibility
+      const transformedResult = normalizeId({
         ...result,
-        id: result.id || (result as any)._id,
-        doctors: result.doctors?.map(doctor => ({
-          ...doctor,
-          id: doctor.id || (doctor as any)._id
-        })) || []
-      };
+        doctors: result.doctors ? normalizeIds(result.doctors) : []
+      });
       
       setSpecialist(transformedResult);
     } catch (err) {
@@ -51,6 +54,30 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
       setError('Không thể tải thông tin chuyên khoa. Vui lòng thử lại sau.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchDoctorsBySpecialty = async () => {
+    try {
+      setDoctorsLoading(true);
+      
+      // Fetch doctors by specialty ID (use specialistId directly)
+      const doctorsResult = await doctorApi.getDoctorsBySpecialty(specialistId);
+      
+      // Transform doctors to match expected type
+      const transformedDoctors = doctorsResult.map(doctor => ({
+        ...doctor,
+        id: doctor.id || (doctor as any)._id || '',
+        specialty: typeof doctor.specialty === 'string' ? doctor.specialty : (doctor.specialty as any)?.name || ''
+      })) as Doctor[];
+      
+      setDoctors(transformedDoctors);
+    } catch (err) {
+      console.error('Error fetching doctors by specialty:', err);
+      // Don't show error for doctors, just log it
+      setDoctors([]);
+    } finally {
+      setDoctorsLoading(false);
     }
   };
 
@@ -123,7 +150,9 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
             <div>
               <h1 className="text-4xl font-bold text-gray-900 mb-4">{specialist.name}</h1>
               {specialist.description && (
-                <p className="text-xl text-gray-600 max-w-2xl">{specialist.description}</p>
+                <div className="text-xl text-gray-600 max-w-2xl">
+                  <HTMLContent content={specialist.description} />
+                </div>
               )}
             </div>
             
@@ -163,17 +192,15 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
       {/* Main Content */}
       <Section padding="xl">
         <Container>
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid lg:grid-cols-4 gap-8">
             {/* Main Content Column */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               {/* Detailed Description */}
               {specialist.detailedDescription && (
                 <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8 mb-8">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Giới Thiệu Chuyên Khoa</h2>
                   <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed">
-                    {specialist.detailedDescription.split('\n').map((paragraph, index) => (
-                      <p key={index} className="mb-4">{paragraph}</p>
-                    ))}
+                    <HTMLContent content={specialist.detailedDescription} />
                   </div>
                 </div>
               )}
@@ -196,34 +223,60 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
                 </div>
               )}
 
-              {/* Doctors */}
-              {specialist.doctors && specialist.doctors.length > 0 && (
-                <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                    Đội Ngũ Bác Sĩ ({specialist.doctors.length})
+              {/* Đội ngũ bác sĩ */}
+              <div className="bg-white rounded-3xl shadow-lg border border-gray-100 p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Đội Ngũ Bác Sĩ {specialist.name}
+                    {!doctorsLoading && doctors.length > 0 && (
+                      <span className="text-blue-600 ml-2">({doctors.length})</span>
+                    )}
                   </h2>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    {specialist.doctors.map((doctor) => (
-                      <div key={doctor.id} className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
+                  {doctors.length > 6 && (
+                    <Link 
+                      href={`/doctors?specialtyId=${specialist.id}&specialty=${encodeURIComponent(specialist.name)}`}
+                      className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                    >
+                      Xem tất cả
+                      <ArrowLeft className="w-4 h-4 rotate-180" />
+                    </Link>
+                  )}
+                </div>
+                
+                {doctorsLoading ? (
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Array.from({ length: 6 }, (_, i) => (
+                      <div key={i} className="bg-gray-50 rounded-2xl p-6 animate-pulse">
                         <div className="flex items-center gap-4">
-                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                            <Users className="w-8 h-8 text-blue-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-gray-900">{doctor.name}</h3>
-                            {doctor.title && (
-                              <p className="text-sm text-gray-600">{doctor.title}</p>
-                            )}
-                            {doctor.experience && (
-                              <p className="text-sm text-blue-600">{doctor.experience} năm kinh nghiệm</p>
-                            )}
+                          <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+                          <div className="flex-1">
+                            <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                            <div className="h-3 bg-gray-200 rounded w-3/4"></div>
                           </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                ) : doctors.length > 0 ? (
+                  <div className="space-y-4">
+                    {doctors.slice(0, 6).map((doctor) => (
+                      <DoctorCard key={doctor.id} doctor={doctor} viewMode="list" />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Users className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      Chưa có bác sĩ
+                    </h3>
+                    <p className="text-gray-600">
+                      Hiện tại chưa có bác sĩ nào thuộc chuyên khoa này.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -240,7 +293,11 @@ export function SpecialistDetailPage({ specialistId }: SpecialistDetailPageProps
                     <div>
                       <div className="text-sm text-gray-600">Số bác sĩ</div>
                       <div className="font-semibold text-gray-900">
-                        {specialist.doctors?.length || 0}+ bác sĩ
+                        {doctorsLoading ? (
+                          <div className="h-4 bg-gray-200 rounded w-16 animate-pulse"></div>
+                        ) : (
+                          `${doctors.length}+ bác sĩ`
+                        )}
                       </div>
                     </div>
                   </div>

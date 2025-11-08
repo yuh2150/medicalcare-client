@@ -1,25 +1,60 @@
 // Type definitions for Medical Care app
 
 export interface Specialist {
-  id: string;
+  id?: string;
+  _id?: string; // MongoDB ObjectId
   name: string;
-  slug: string;
-  shortDesc: string;
-  thumbnail: string;
+  slug?: string;
+  shortDesc?: string;
+  thumbnail?: string;
+  image?: string; // Backend uses 'image' instead of 'thumbnail'
   description?: string;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface Doctor {
-  id: string;
+  id?: string;
+  _id?: string; // MongoDB ObjectId
   name: string;
   specialty: string;
-  rating: number;
-  avatar: string;
-  experience?: number;
+  specialtyId?: string;
+  rating?: number;
+  avatar?: string;
+  experience?: string;
   qualifications?: string[];
   schedule?: string[];
+  location?: string;
+  phone?: string;
+  email?: string;
+  reviewCount?: number;
+  bio?: string;
+  description?: string; // Mô tả chi tiết HTML
+  education?: string[];
+  trainingProcess?: string[]; // Quá trình đào tạo
+  academicRank?: string; // Học hàm (GS, PGS, TS...)
+  academicDegree?: string; // Học vị (Thạc sĩ, Tiến sĩ...)
+  organization?: string; // Tổ chức/Bệnh viện đang công tác
+  organizationMember?: string; // Thành viên tổ chức
+  slug?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface TimeSlot {
+  time: string; // Format: "08:00-09:00"
+  isBooked: boolean;
+  _id?: string;
+}
+
+export interface Plan {
+  id?: string;
+  _id?: string; // MongoDB ObjectId
+  doctorId: string;
+  doctor?: Doctor;
+  date: string;
+  timeSlots: TimeSlot[];
+  notes?: string;
   createdAt?: string;
   updatedAt?: string;
 }

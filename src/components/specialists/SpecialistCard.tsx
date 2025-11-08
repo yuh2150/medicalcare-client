@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRight, Users, Calendar } from 'lucide-react';
+import { getId } from '@/lib/utils';
 import { Specialty } from '@/types/specialist';
+import { HTMLContent } from '../ui';
 
 interface SpecialistCardProps {
   specialist: Specialty;
@@ -42,15 +44,15 @@ export function SpecialistCard({ specialist, viewMode = 'grid' }: SpecialistCard
 
   if (viewMode === 'list') {
     return (
-      <Link href={`/specialists/${specialist.id}`}>
-        <div className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 p-6">
+      <Link href={`/specialists/${getId(specialist)}`}>
+        <div className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200 p-6 m-6">
           <div className="flex items-center gap-6">
             {/* Icon/Image */}
             <div className="shrink-0">
-              {specialist.image ? (
+              {(specialist.image || specialist.thumbnail) ? (
                 <div className="w-16 h-16 rounded-2xl overflow-hidden">
                   <Image
-                    src={specialist.image}
+                    src={specialist.image || specialist.thumbnail || ''}
                     alt={specialist.name}
                     width={64}
                     height={64}
@@ -97,13 +99,13 @@ export function SpecialistCard({ specialist, viewMode = 'grid' }: SpecialistCard
   }
 
   return (
-    <Link href={`/specialists/${specialist.id}`}>
+    <Link href={`/specialists/${getId(specialist)}`}>
       <div className="group bg-white rounded-3xl shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100 hover:border-blue-200 overflow-hidden transform hover:-translate-y-2">
         {/* Image/Icon Header */}
         <div className="relative h-48 bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center">
-          {specialist.image ? (
+          {(specialist.image || specialist.thumbnail) ? (
             <Image
-              src={specialist.image}
+              src={specialist.image || specialist.thumbnail || ''}
               alt={specialist.name}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -125,9 +127,16 @@ export function SpecialistCard({ specialist, viewMode = 'grid' }: SpecialistCard
           </h3>
           
           {specialist.description && (
-            <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
-              {specialist.description}
-            </p>
+            <div className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+              <HTMLContent 
+                content={specialist.description}
+                maxLength={150}
+                showReadMore={false}
+                enableLinks={false}
+                enableTables={false}
+                className="text-sm"
+              />
+            </div>
           )}
 
           {/* Stats */}
