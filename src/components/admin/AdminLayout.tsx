@@ -100,7 +100,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
 
   const handleLogout = async () => {
     await logout();
-    router.push('/admin/login');
+    router.push('/login');
   };
 
   const filteredNavigation = navigationItems.filter(item => hasPermission(item.permission));

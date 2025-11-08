@@ -14,6 +14,7 @@ import AdminTable, { Column } from '@/components/admin/AdminTable';
 import { Doctor, Specialty, TableFilter, BulkAction } from '@/types/admin';
 import { doctorApi } from '@/services/adminApi';
 import { specialistApi } from '@/services/specialistApi';
+import { RichTextEditor, HTMLContent } from '@/components/ui';
 
 const DOCTOR_STATUS = {
   active: 'Hoạt động',
@@ -521,7 +522,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   maxLength={100}
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value.trim() }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -533,7 +534,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value.toLowerCase() }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -546,7 +547,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   placeholder="+84901234567"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -558,7 +559,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   required
                   value={formData.specialtyId}
                   onChange={(e) => setFormData(prev => ({ ...prev, specialtyId: e.target.value }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">-- Chọn chuyên khoa --</option>
                   {specialties.map((specialty) => (
@@ -577,7 +578,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   required
                   value={formData.academicTitle}
                   onChange={(e) => setFormData(prev => ({ ...prev, academicTitle: e.target.value as any }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {Object.entries(ACADEMIC_TITLES).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
@@ -593,7 +594,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   required
                   value={formData.academicDegree}
                   onChange={(e) => setFormData(prev => ({ ...prev, academicDegree: e.target.value as any }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {Object.entries(ACADEMIC_DEGREES).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
@@ -610,7 +611,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   min="0"
                   value={formData.consultationFee}
                   onChange={(e) => setFormData(prev => ({ ...prev, consultationFee: parseInt(e.target.value) || 0 }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
@@ -622,7 +623,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                   required
                   value={formData.status}
                   onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
-                  className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   {Object.entries(DOCTOR_STATUS).map(([value, label]) => (
                     <option key={value} value={value}>{label}</option>
@@ -639,23 +640,20 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 type="url"
                 value={formData.avatar}
                 onChange={(e) => setFormData(prev => ({ ...prev, avatar: e.target.value }))}
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mô tả chi tiết
-              </label>
-              <textarea
-                rows={4}
-                maxLength={1000}
+              <RichTextEditor
+                key={doctor?.id || (doctor as any)?._id || 'new'} // Force re-mount for different records
+                label="Mô tả chi tiết"
                 value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(data) => setFormData(prev => ({ ...prev, description: data }))}
                 placeholder="Giới thiệu chuyên môn, kinh nghiệm, lĩnh vực điều trị..."
+                helperText="Mô tả chi tiết về bác sĩ với định dạng rich text"
+                className="mb-4 text-gray-900"
               />
-              <p className="text-xs text-gray-500 mt-1">Tối đa 1000 ký tự</p>
             </div>
 
             <div>
@@ -667,7 +665,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 maxLength={500}
                 value={formData.membership}
                 onChange={(e) => setFormData(prev => ({ ...prev, membership: e.target.value }))}
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="VD: Hội Tim mạch Việt Nam, Hiệp hội Bác sĩ Châu Á..."
               />
               <p className="text-xs text-gray-500 mt-1">Tối đa 500 ký tự</p>
@@ -682,7 +680,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 maxLength={1000}
                 value={formData.training}
                 onChange={(e) => setFormData(prev => ({ ...prev, training: e.target.value }))}
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="VD: Tốt nghiệp Đại học Y Hà Nội, Thạc sĩ tại Đại học Tokyo..."
               />
               <p className="text-xs text-gray-500 mt-1">Tối đa 1000 ký tự</p>
@@ -697,7 +695,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 maxLength={1000}
                 value={formData.experience}
                 onChange={(e) => setFormData(prev => ({ ...prev, experience: e.target.value }))}
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="VD: 10 năm tại BV Bạch Mai, 5 năm tại Singapore..."
               />
               <p className="text-xs text-gray-500 mt-1">Tối đa 1000 ký tự</p>
@@ -712,7 +710,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 value={formData.additionalImages}
                 onChange={(e) => setFormData(prev => ({ ...prev, additionalImages: e.target.value }))}
                 placeholder="VD: /images/cert1.jpg, /images/cert2.jpg"
-                className="text-gray-500 text-gray-500 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <p className="text-xs text-gray-500 mt-1">
                 Nhập URL các ảnh chứng chỉ, bằng cấp, giải thưởng. Cách nhau bởi dấu phẩy

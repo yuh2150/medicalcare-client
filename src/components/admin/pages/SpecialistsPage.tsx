@@ -12,6 +12,7 @@ import {
 import AdminTable, { Column } from '@/components/admin/AdminTable';
 import { Specialty, TableFilter, BulkAction } from '../../../types/admin';
 import { specialistApi } from '@/services/adminApi';
+import { RichTextEditor, HTMLContent } from '@/components/ui';
 
 export default function SpecialistsPage() {
   const [specialists, setSpecialists] = useState<Specialty[]>([]);
@@ -175,9 +176,19 @@ export default function SpecialistsPage() {
               lineHeight: '1.4em',
               maxHeight: '4.2em'
             }}
-            title={specialty.description || 'Chưa có mô tả'}
           >
-            {specialty.description || 'Chưa có mô tả'}
+            {specialty.description ? (
+              <HTMLContent 
+                content={specialty.description} 
+                maxLength={120}
+                showReadMore={false}
+                className="text-sm text-gray-600"
+                enableLinks={false}
+                enableTables={false}
+              />
+            ) : (
+              <span className="text-gray-400 italic">Chưa có mô tả</span>
+            )}
           </div>
         </div>
       ),
@@ -464,27 +475,19 @@ const SpecialtyModal: React.FC<SpecialtyModalProps> = ({ specialty, onClose, onS
             
             {/* Description Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mô tả chi tiết
-                <span className="text-gray-500 text-xs ml-1">(tối đa 2000 ký tự)</span>
-              </label>
-              <textarea
-                rows={4}
-                maxLength={2000}
+              <RichTextEditor
+                key={specialty?.id || (specialty as any)?._id || 'new'} // Force re-mount for different records
+                label="Mô tả chi tiết"
                 value={formData.description}
-                onChange={(e) => {
-                  setFormData(prev => ({ ...prev, description: e.target.value }));
+                onChange={(data) => {
+                  setFormData(prev => ({ ...prev, description: data }));
                   if (errors.description) setErrors(prev => ({ ...prev, description: '' }));
                 }}
                 placeholder="Mô tả chi tiết về chuyên khoa..."
-                className={`w-full border rounded-md px-3 py-2 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.description ? 'border-red-500' : 'border-gray-300'
-                }`}
+                error={errors.description}
+                helperText="Bạn có thể sử dụng định dạng rich text để tạo nội dung đẹp mắt"
+                className="mb-4 text-gray-900"
               />
-              {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
-              <div className="text-xs text-gray-500 mt-1">
-                {formData.description.length}/2000 ký tự
-              </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-4">
