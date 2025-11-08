@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAuth } from '../../context/AuthContext';
 import { RegisterRequest } from '../../types/auth';
-import { Eye, EyeOff, Mail, Lock, User, AlertCircle, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone, AlertCircle, CheckCircle } from 'lucide-react';
 
 // Validation schema
 const registerSchema = yup.object({
@@ -16,6 +16,13 @@ const registerSchema = yup.object({
     .required('Họ tên là bắt buộc')
     .min(2, 'Họ tên phải có ít nhất 2 ký tự')
     .max(50, 'Họ tên không được quá 50 ký tự'),
+  phone: yup
+    .string()
+    .required('Số điện thoại là bắt buộc')
+    .matches(
+      /^(\+84|84|0)([3-9])([0-9]{8})$/,
+      'Số điện thoại không hợp lệ (VD: 0912345678)'
+    ),
   email: yup
     .string()
     .required('Email là bắt buộc')
@@ -35,6 +42,7 @@ const registerSchema = yup.object({
 });
 
 interface FormData extends RegisterRequest {
+  phone: string;
   confirmPassword: string;
 }
 
@@ -157,6 +165,33 @@ const RegisterPage: React.FC = () => {
             </div>
             {errors.name && (
               <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
+            )}
+          </div>
+
+          {/* Phone Field */}
+          <div>
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+              Số điện thoại
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Phone className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                {...register('phone')}
+                type="tel"
+                id="phone"
+                className={`block w-full pl-10 pr-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+                  errors.phone 
+                    ? 'border-red-300 focus:ring-red-500 focus:border-red-500' 
+                    : 'border-gray-300'
+                }`}
+                placeholder="Nhập số điện thoại (VD: 0912345678)"
+                autoComplete="tel"
+              />
+            </div>
+            {errors.phone && (
+              <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>
             )}
           </div>
 

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
-import { User, LogOut, Settings, Shield, ChevronDown } from 'lucide-react';
+import { User, LogOut, Settings, Shield, ChevronDown, Calendar, Plus } from 'lucide-react';
 
 const AuthNavigation: React.FC = () => {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -128,6 +128,27 @@ const AuthNavigation: React.FC = () => {
                   <Settings className="h-4 w-4 mr-3" />
                   Thông tin cá nhân
                 </Link>
+
+                {user.role === 'customer' && (
+                  <>
+                    <Link
+                      href="/appointments/my"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-200"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <Calendar className="h-4 w-4 mr-3" />
+                      Lịch hẹn của tôi
+                    </Link>
+                    <Link
+                      href="/appointments/book"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-200"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      <Plus className="h-4 w-4 mr-3" />
+                      Đặt lịch khám
+                    </Link>
+                  </>
+                )}
 
                 {(user.role === 'admin' || user.role === 'doctor') && (
                   <Link

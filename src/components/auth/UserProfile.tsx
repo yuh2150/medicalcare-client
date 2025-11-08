@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { User, LogOut, Shield, RefreshCw, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, LogOut, Shield, RefreshCw, AlertCircle, CheckCircle, Calendar, Plus } from 'lucide-react';
 
 const UserProfile: React.FC = () => {
   const { user, logout, updateProfile, isAuthenticated } = useAuth();
@@ -158,6 +158,44 @@ const UserProfile: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Appointment Management - Only for customers */}
+        {user.role === 'customer' && (
+          <div className="bg-white shadow rounded-lg p-6 mt-6">
+            <h3 className="text-lg font-medium text-gray-900 mb-6">Quản lý lịch hẹn</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="/appointments/my"
+                className="flex items-center justify-center px-6 py-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-400 transition-colors"
+              >
+                <Calendar className="h-5 w-5 mr-2 text-blue-500" />
+                Xem lịch hẹn của tôi
+              </a>
+              <a
+                href="/appointments/book"
+                className="flex items-center justify-center px-6 py-4 border border-transparent rounded-lg shadow-sm bg-blue-600 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Đặt lịch khám mới
+              </a>
+            </div>
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+              <div className="flex">
+                <AlertCircle className="h-5 w-5 text-blue-400" />
+                <div className="ml-3">
+                  <h4 className="text-sm font-medium text-blue-800">Lưu ý</h4>
+                  <div className="mt-2 text-sm text-blue-700">
+                    <ul className="list-disc list-inside space-y-1">
+                      <li>Bạn có thể xem và quản lý tất cả lịch hẹn của mình</li>
+                      <li>Hủy lịch hẹn chỉ được phép khi trạng thái "Chờ xác nhận"</li>
+                      <li>Vui lòng có mặt đúng giờ để tránh bị đánh dấu "Không đến"</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
