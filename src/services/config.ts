@@ -87,7 +87,7 @@ export const createApiClient = (baseURL: string): AxiosInstance => {
         if (TokenManager.isTokenExpired(token)) {
           TokenManager.clearTokens();
           if (typeof window !== 'undefined') {
-            window.location.href = '/admin/login';
+            window.location.href = '/login';
           }
           return Promise.reject(new Error('Token expired'));
         }
@@ -142,7 +142,7 @@ export const createApiClient = (baseURL: string): AxiosInstance => {
 // Helper function to handle redirect
 const redirectToLogin = (): void => {
   if (typeof window !== 'undefined') {
-    window.location.href = '/admin/login';
+    window.location.href = '/login';
   }
 };
 

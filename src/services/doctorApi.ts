@@ -29,6 +29,12 @@ export const doctorApi = {
     return response.data || [];
   },
 
+  async getDoctorsBySpecialtyName(specialtyName: string): Promise<Doctor[]> {
+    // Fallback method using specialty name (if needed)
+    const response = await apiClient.get(`/medicalcare/api/doctors/specialty-name/${encodeURIComponent(specialtyName)}`);
+    return response.data || [];
+  },
+
   async createDoctor(doctor: Omit<Doctor, 'id' | 'createdAt' | 'updatedAt'>): Promise<{
     success: boolean;
     data?: Doctor;

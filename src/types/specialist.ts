@@ -2,6 +2,11 @@
 import type { Specialty as AdminSpecialty } from './admin';
 
 export interface Specialty extends AdminSpecialty {
+  // MongoDB support
+  _id?: string;
+  // Image fields (API might use either)
+  image?: string;
+  thumbnail?: string;
   // Additional fields for detailed view
   services?: string[];
   doctors?: SpecialistDoctor[];
@@ -10,7 +15,8 @@ export interface Specialty extends AdminSpecialty {
 }
 
 export interface SpecialistDoctor {
-  id: string;
+  id?: string;
+  _id?: string; // MongoDB support
   name: string;
   title?: string;
   avatar?: string;

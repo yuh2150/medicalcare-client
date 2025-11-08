@@ -533,3 +533,7 @@ export * from './Form';
 
 // Table components
 export * from './Table';
+
+// Rich Text components
+export { RichTextEditor } from './RichTextEditor';
+export { HTMLContent, stripHTMLTags, getTextLength } from './HTMLContent';

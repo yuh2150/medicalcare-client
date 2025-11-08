@@ -165,12 +165,13 @@ export type AppointmentStatus = 'scheduled' | 'confirmed' | 'in-progress' | 'com
 
 // Appointments Management
 export interface Appointment {
-  id: string;
+  id?: string; // For regular databases
+  _id?: string; // For MongoDB
   customerId: string; // Customer/Patient ID
   customerName: string; // Customer/Patient name
   customerPhone?: string; // Customer phone
   doctorId: string; // Doctor ID
-  doctorName: string; // Doctor name (populated)
+  doctorName: string | any; // Doctor name (populated) - can be string or object
   specialtyName: string; // Specialty name (populated)
   planId: string; // Plan ID
   date: string; // Appointment date (YYYY-MM-DD)
