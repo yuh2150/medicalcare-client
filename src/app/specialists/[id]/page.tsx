@@ -11,6 +11,7 @@ export const metadata = {
   description: 'Thông tin chi tiết về chuyên khoa và đội ngũ bác sĩ chuyên gia tại WebMedical.',
 };
 
-export default function SpecialistDetail({ params }: SpecialistDetailPageProps) {
-  return <SpecialistDetailPage specialistId={params.id} />;
+export default async function SpecialistDetail({ params }: SpecialistDetailPageProps) {
+  const { id } = await params;
+  return <SpecialistDetailPage specialistId={id} />;
 }

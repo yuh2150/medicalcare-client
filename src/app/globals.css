@@ -211,3 +211,216 @@ html {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+
+/* CKEditor 5 Custom Styles */
+.ck-editor {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+.ck-editor__editable {
+  min-height: 200px !important;
+  padding: 16px !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  border: none !important;
+}
+
+.ck-toolbar {
+  border: none !important;
+  background: #f8f9fa !important;
+  padding: 12px !important;
+  border-bottom: 1px solid #e5e7eb !important;
+}
+
+.ck-button {
+  border-radius: 4px !important;
+  margin: 2px !important;
+}
+
+.ck-button:hover {
+  background: #e5e7eb !important;
+}
+
+.ck-button.ck-on {
+  background: #3b82f6 !important;
+  color: white !important;
+}
+
+.ck-dropdown__panel {
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.ck-content {
+  font-family: inherit !important;
+}
+
+.ck-content h1, .ck-content h2, .ck-content h3 {
+  color: #1f2937 !important;
+  font-weight: 600 !important;
+  margin: 1em 0 0.5em 0 !important;
+}
+
+.ck-content p {
+  margin: 0.5em 0 !important;
+}
+
+.ck-content ul, .ck-content ol {
+  margin: 0.5em 0 !important;
+  padding-left: 2em !important;
+}
+
+.ck-content blockquote {
+  border-left: 4px solid #3b82f6 !important;
+  margin: 1em 0 !important;
+  padding: 0.5em 0 0.5em 1em !important;
+  background: #f8fafc !important;
+  font-style: italic !important;
+}
+
+.ck-content table {
+  border-collapse: collapse !important;
+  margin: 1em 0 !important;
+  width: 100% !important;
+}
+
+.ck-content table td, .ck-content table th {
+  border: 1px solid #d1d5db !important;
+  padding: 8px 12px !important;
+}
+
+.ck-content table th {
+  background: #f3f4f6 !important;
+  font-weight: 600 !important;
+}
+
+/* HTMLContent Custom Styles */
+.prose {
+  color: inherit;
+  max-width: none;
+}
+
+.prose p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose strong, .prose b {
+  font-weight: 600;
+  color: inherit;
+}
+
+.prose em, .prose i {
+  font-style: italic;
+  color: inherit;
+}
+
+.prose u {
+  text-decoration: underline;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  font-weight: 700;
+  line-height: 1.3;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: inherit;
+}
+
+.prose h1:first-child, .prose h2:first-child, .prose h3:first-child,
+.prose h4:first-child, .prose h5:first-child, .prose h6:first-child {
+  margin-top: 0;
+}
+
+.prose ul, .prose ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 1.5em;
+}
+
+.prose li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.prose blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1em;
+  margin: 1em 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+.prose a {
+  color: #3b82f6;
+  text-decoration: underline;
+  text-decoration-color: #93c5fd;
+  transition: all 0.2s ease;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
+  text-decoration-color: #3b82f6;
+}
+
+.prose table {
+  width: 100%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.prose th, .prose td {
+  padding: 0.75em;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.prose th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.prose tr:last-child td {
+  border-bottom: none;
+}
+
+/* Compact prose for small text */
+.prose-sm {
+  font-size: 0.875rem;
+}
+
+.prose-sm p {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.prose-sm ul, .prose-sm ol {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding-left: 1.25em;
+}
+
+.prose-sm li {
+  margin-top: 0.125em;
+  margin-bottom: 0.125em;
+}
+
+.prose-sm h1, .prose-sm h2, .prose-sm h3, 
+.prose-sm h4, .prose-sm h5, .prose-sm h6 {
+  margin-top: 0.5em;
+  margin-bottom: 0.25em;
+}
