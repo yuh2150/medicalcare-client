@@ -64,7 +64,7 @@ export function Footer() {
                   { name: 'Về Chúng Tôi', href: '/about' },
                   { name: 'Dịch Vụ', href: '/services' },
                   { name: 'Tìm Bác Sĩ', href: '/doctors' },
-                  { name: 'Đặt Lịch Khám', href: '/appointments' },
+                  { name: 'Đặt Lịch Khám', href: '/appointments/book' },
                   { name: 'Cổng Bệnh Nhân', href: '/portal' },
                   { name: 'Blog Sức Khỏe', href: '/blog' }
                 ].map((link) => (

@@ -7,6 +7,7 @@ import { SpecialistFilters } from './SpecialistFilters';
 import { SpecialistCard } from './SpecialistCard';
 import { SpecialistSkeleton } from './SpecialistSkeleton';
 import { specialistApi } from '@/services';
+import { normalizeIds } from '@/lib/utils';
 import type { Specialty, SpecialistFilter, PaginatedSpecialists } from '@/types/specialist';
 
 export function SpecialistsPage() {
@@ -45,17 +46,13 @@ export function SpecialistsPage() {
         ...cleanFilters
       });
       
-      // Transform MongoDB _id to id if needed
+      // Normalize IDs for compatibility
       const transformedResult = {
         ...result,
-        data: result.data.map(specialist => ({
+        data: normalizeIds(result.data.map(specialist => ({
           ...specialist,
-          id: specialist.id || (specialist as any)._id,
-          doctors: specialist.doctors?.map(doctor => ({
-            ...doctor,
-            id: doctor.id || (doctor as any)._id
-          })) || []
-        }))
+          doctors: specialist.doctors ? normalizeIds(specialist.doctors) : []
+        })))
       };
       
       setSpecialists(transformedResult);

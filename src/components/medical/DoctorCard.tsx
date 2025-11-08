@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Star } from 'lucide-react';
+import { getId } from '@/lib/utils';
 import type { Doctor } from '@/types';
 
 // Component Thẻ Bác sĩ
@@ -10,19 +11,25 @@ interface DoctorCardProps {
 
 export function DoctorCard({ doctor }: DoctorCardProps) {
   return (
-    <Link href={`/doctors/${doctor.id}`}>
+    <Link href={`/doctors/${getId(doctor)}`}>
       <div className="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer border border-gray-100 p-8 text-center">
         <div className="relative w-24 h-24 mx-auto mb-6 rounded-full overflow-hidden bg-linear-to-br from-blue-100 to-blue-200 ring-4 ring-white shadow-lg group-hover:scale-110 transition-transform duration-300">
-          <Image
-            src={doctor.avatar}
-            alt={doctor.name}
-            fill
-            className="object-cover"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = '/images/placeholder-doctor.png';
-            }}
-          />
+          {doctor.avatar ? (
+            <Image
+              src={doctor.avatar}
+              alt={doctor.name}
+              fill
+              className="object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/images/placeholder-doctor.png';
+              }}
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-600 text-2xl">
+              👨‍⚕️
+            </div>
+          )}
         </div>
         
         <div className="space-y-3">
@@ -40,7 +47,7 @@ export function DoctorCard({ doctor }: DoctorCardProps) {
                 <Star
                   key={i}
                   className={`w-4 h-4 ${
-                    i < Math.floor(doctor.rating)
+                    i < Math.floor(doctor.rating || 0)
                       ? 'text-yellow-400 fill-current'
                       : 'text-gray-300'
                   }`}

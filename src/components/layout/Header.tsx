@@ -12,7 +12,7 @@ export function Header() {
     { name: 'Trang Chủ', href: '/' },
     { name: 'Chuyên khoa', href: '/specialists' },
     { name: 'Bác Sĩ', href: '/doctors' },
-    { name: 'Đặt Lịch', href: '/appointments' },
+    { name: 'Đặt Lịch', href: '/appointments/book' },
     { name: 'Về Chúng Tôi', href: '/about' },
     { name: 'Liên Hệ', href: '/contact' }
   ];
