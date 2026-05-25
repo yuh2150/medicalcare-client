@@ -1,6 +1,10 @@
 'use client';
 
+<<<<<<< HEAD
 import { useMemo, useState, useEffect } from 'react';
+=======
+import { useState, useEffect } from 'react';
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 import Image from 'next/image';
 import Link from 'next/link';
 import { 
@@ -16,7 +20,11 @@ import appointmentApi from '@/services/appointmentApi';
 import type { AppointmentBookingData } from './AppointmentBookingModal';
 import { ErrorMessage, LoadingSpinner } from '@/components/ui';
 import { HTMLContent } from '@/components/ui/HTMLContent';
+<<<<<<< HEAD
 import { Section, Container, Breadcrumb } from '@/components/ui/Layout';
+=======
+import { Section, Container } from '@/components/ui/Layout';
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 import { DoctorCard } from './DoctorCard';
 import { AppointmentScheduler } from './AppointmentScheduler';
 import { DoctorInfoSection } from './DoctorInfoSection';
@@ -81,6 +89,7 @@ export function DoctorDetailPage({ doctorId }: DoctorDetailPageProps) {
     }
   };
 
+<<<<<<< HEAD
   const breadcrumbItems = useMemo(() => {
     const items = [
       { label: 'Trang Chủ', href: '/' },
@@ -92,6 +101,13 @@ export function DoctorDetailPage({ doctorId }: DoctorDetailPageProps) {
       current: index === items.length - 1
     }));
   }, [doctor?.name]);
+=======
+  const breadcrumbItems = [
+    { label: 'Trang Chủ', href: '/' },
+    { label: 'Bác Sĩ', href: '/doctors' },
+    { label: doctor?.name || 'Chi Tiết', href: '#' }
+  ];
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 
   useEffect(() => {
     fetchDoctorDetail();
@@ -189,7 +205,22 @@ export function DoctorDetailPage({ doctorId }: DoctorDetailPageProps) {
       <Section background="white" padding="lg">
         <Container>
           {/* Breadcrumb */}
+<<<<<<< HEAD
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
+=======
+          <nav className="mb-6">
+            <ol className="flex items-center space-x-2 text-sm">
+              {breadcrumbItems.map((item, index) => (
+                <li key={index} className="flex items-center">
+                  {index > 0 && <span className="mx-2 text-gray-400">/</span>}
+                  <a href={item.href} className="text-blue-600 hover:text-blue-800">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
           
           {/* Doctor info header */}
           <div className="flex flex-col lg:flex-row gap-8 items-start">

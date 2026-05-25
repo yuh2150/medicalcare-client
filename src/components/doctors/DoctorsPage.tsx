@@ -1,13 +1,21 @@
 'use client';
 
+<<<<<<< HEAD
 import { useMemo, useState, useEffect } from 'react';
+=======
+import { useState, useEffect } from 'react';
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 import { useSearchParams } from 'next/navigation';
 import { doctorApi } from '@/services';
 import { DoctorCard } from './DoctorCard';
 import { DoctorFilters } from './DoctorFilters';
 import { DoctorSkeleton } from './DoctorSkeleton';
 import { ErrorMessage } from '@/components/ui';
+<<<<<<< HEAD
 import { Section, Container, Breadcrumb } from '@/components/ui/Layout';
+=======
+import { Section, Container } from '@/components/ui/Layout';
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 import { normalizeIds } from '@/lib/utils';
 import type { Doctor } from '@/types';
 
@@ -54,6 +62,7 @@ export function DoctorsPageContent() {
     };
   });
 
+<<<<<<< HEAD
   const breadcrumbItems = useMemo(() => {
     const items = [
       { label: 'Trang Chủ', href: '/' },
@@ -65,6 +74,13 @@ export function DoctorsPageContent() {
       current: index === items.length - 1
     }));
   }, [filters.specialty]);
+=======
+  const breadcrumbItems = [
+    { label: 'Trang Chủ', href: '/' },
+    { label: 'Bác Sĩ', href: '/doctors' },
+    ...(filters.specialty ? [{ label: filters.specialty, href: '#' }] : [])
+  ];
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
 
   // Update filters when URL params change
   useEffect(() => {
@@ -151,7 +167,22 @@ export function DoctorsPageContent() {
       <Section background="white" padding="lg">
         <Container>
           {/* Breadcrumb */}
+<<<<<<< HEAD
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
+=======
+          <nav className="mb-6">
+            <ol className="flex items-center space-x-2 text-sm">
+              {breadcrumbItems.map((item, index) => (
+                <li key={index} className="flex items-center">
+                  {index > 0 && <span className="mx-2 text-gray-400">/</span>}
+                  <a href={item.href} className="text-blue-600 hover:text-blue-800">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+>>>>>>> 6152b368358c8f33f24f378ff94fe8aa41662a46
           
           {/* Page Header */}
           <div className="text-center mb-8">
