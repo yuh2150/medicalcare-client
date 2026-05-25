@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { Header, Footer } from "@/components/layout";
+import { ChatWidget } from "@/components/ui/ChatWidget";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
@@ -61,6 +62,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <ChatWidget />
         </AuthProvider>
       </body>
     </html>

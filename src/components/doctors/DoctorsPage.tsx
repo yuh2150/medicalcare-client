@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { doctorApi } from '@/services';
 import { DoctorCard } from './DoctorCard';
 import { DoctorFilters } from './DoctorFilters';
 import { DoctorSkeleton } from './DoctorSkeleton';
 import { ErrorMessage } from '@/components/ui';
-import { Section, Container } from '@/components/ui/Layout';
+import { Section, Container, Breadcrumb } from '@/components/ui/Layout';
 import { normalizeIds } from '@/lib/utils';
 import type { Doctor } from '@/types';
 
@@ -54,11 +54,17 @@ export function DoctorsPageContent() {
     };
   });
 
-  const breadcrumbItems = [
-    { label: 'Trang Chủ', href: '/' },
-    { label: 'Bác Sĩ', href: '/doctors' },
-    ...(filters.specialty ? [{ label: filters.specialty, href: '#' }] : [])
-  ];
+  const breadcrumbItems = useMemo(() => {
+    const items = [
+      { label: 'Trang Chủ', href: '/' },
+      { label: 'Bác Sĩ', href: '/doctors' },
+      ...(filters.specialty ? [{ label: filters.specialty, href: '#' }] : [])
+    ];
+    return items.map((item, index) => ({
+      ...item,
+      current: index === items.length - 1
+    }));
+  }, [filters.specialty]);
 
   // Update filters when URL params change
   useEffect(() => {
@@ -145,18 +151,7 @@ export function DoctorsPageContent() {
       <Section background="white" padding="lg">
         <Container>
           {/* Breadcrumb */}
-          <nav className="mb-6">
-            <ol className="flex items-center space-x-2 text-sm">
-              {breadcrumbItems.map((item, index) => (
-                <li key={index} className="flex items-center">
-                  {index > 0 && <span className="mx-2 text-gray-400">/</span>}
-                  <a href={item.href} className="text-blue-600 hover:text-blue-800">
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
+          <Breadcrumb items={breadcrumbItems} className="mb-6" />
           
           {/* Page Header */}
           <div className="text-center mb-8">

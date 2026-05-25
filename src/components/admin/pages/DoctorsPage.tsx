@@ -492,7 +492,8 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
         alert(doctor ? 'Cập nhật thành công!' : 'Tạo bác sĩ thành công!');
         onSave();
       } else {
-        throw new Error(response.message || 'Có lỗi xảy ra');
+        alert(response.message || 'Có lỗi xảy ra');
+        return;
       }
     } catch (error) {
       console.error('Save doctor error:', error);
@@ -637,7 +638,7 @@ function DoctorModal({ doctor, onClose, onSave }: DoctorModalProps) {
                 URL Ảnh đại diện
               </label>
               <input
-                type="url"
+                type="text"
                 value={formData.avatar}
                 onChange={(e) => setFormData(prev => ({ ...prev, avatar: e.target.value }))}
                 className="text-gray-900 w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent"

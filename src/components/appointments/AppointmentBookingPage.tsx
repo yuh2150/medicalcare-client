@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Search, Calendar, Clock, User, MapPin, Phone, ChevronDown } from 'lucide-react';
 import { specialistApi, doctorApi, planApi } from '@/services';
 import appointmentApi from '@/services/appointmentApi';
@@ -20,6 +21,8 @@ interface SearchFilters {
 }
 
 export function AppointmentBookingPage() {
+  const stripHtml = (value: string) =>
+    value.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
   const { user, isAuthenticated } = useAuth();
   const [step, setStep] = useState<'search' | 'select-doctor' | 'book'>('search');
   const [filters, setFilters] = useState<SearchFilters>({
@@ -240,28 +243,46 @@ export function AppointmentBookingPage() {
                     <LoadingSpinner />
                   </div>
                 ) : (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {specialties.map((specialty) => (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {specialties.map((specialty) => {
+                      const description = stripHtml(
+                        (specialty as any).shortDesc || specialty.description || 'Khám và điều trị chuyên khoa'
+                      );
+
+                      return (
                       <button
                         key={specialty.id || specialty._id}
                         onClick={() => handleSpecialtyChange(specialty.id || specialty._id || '')}
-                        className="p-4 text-left border-2 border-gray-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 group"
+                        className="p-5 min-h-[120px] text-left border-2 border-gray-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all duration-200 group"
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                            <span className="text-2xl">🏥</span>
+                          <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-200 transition-colors shrink-0">
+                            {specialty.image || specialty.thumbnail ? (
+                              <div className="w-9 h-9 rounded-lg bg-white/70 p-1">
+                                <Image
+                                  src={specialty.image || specialty.thumbnail || ''}
+                                  alt={specialty.name}
+                                  width={36}
+                                  height={36}
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                            ) : (
+                              <span className="text-2xl">🏥</span>
+                            )}
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-900 group-hover:text-blue-700">
                               {specialty.name}
                             </h3>
-                            <p className="text-sm text-gray-600 line-clamp-1">
-                              {(specialty as any).shortDesc || specialty.description || 'Khám và điều trị chuyên khoa'}
+                            <p className="text-sm text-gray-600 line-clamp-2">
+                              {description}
                             </p>
                           </div>
                         </div>
                       </button>
-                    ))}
+                    );
+                  })}
                   </div>
                 )}
               </div>

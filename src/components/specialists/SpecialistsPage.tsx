@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Container, Section, Breadcrumb, PageHeader } from '../layout';
+import { Container, Section, Breadcrumb } from '../layout';
 import { ErrorMessage } from '../ui';
 import { SpecialistFilters } from './SpecialistFilters';
 import { SpecialistCard } from './SpecialistCard';
@@ -15,6 +15,7 @@ export function SpecialistsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<SpecialistFilter>({
     search: '',
     sortBy: 'name',
@@ -28,7 +29,7 @@ export function SpecialistsPage() {
 
   useEffect(() => {
     fetchSpecialists();
-  }, [filters]);
+  }, [filters, page]);
 
   const fetchSpecialists = async () => {
     try {
@@ -41,8 +42,8 @@ export function SpecialistsPage() {
       );
       
       const result = await specialistApi.getSpecialists({
-        page: 1,
-        limit: 20,
+        page,
+        limit: 12,
         ...cleanFilters
       });
       
@@ -65,10 +66,12 @@ export function SpecialistsPage() {
   };
 
   const handleSearch = (query: string) => {
+    setPage(1);
     setFilters(prev => ({ ...prev, search: query }));
   };
 
   const handleFilterChange = (newFilters: Partial<SpecialistFilter>) => {
+    setPage(1);
     setFilters(prev => ({ ...prev, ...newFilters }));
   };
 
@@ -76,16 +79,28 @@ export function SpecialistsPage() {
     setViewMode(mode);
   };
 
+  const totalItems = specialists?.pagination?.total ?? specialists?.data.length ?? 0;
+  const totalPages = specialists?.pagination?.totalPages ?? Math.max(1, Math.ceil(totalItems / 12));
+  const currentPage = specialists?.pagination?.page ?? page;
+  const shouldClientPaginate = !specialists?.pagination || specialists.data.length > 12;
+  const pagedData = specialists
+    ? (shouldClientPaginate
+        ? specialists.data.slice((page - 1) * 12, page * 12)
+        : specialists.data)
+    : [];
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Page Header */}
       <Section background="white" padding="lg">
         <Container>
           <Breadcrumb items={breadcrumbItems} className="mb-6" />
-          <PageHeader
-            title="Chuyên Khoa Y Tế"
-            description="Khám phá các chuyên khoa đa dạng với đội ngũ bác sĩ chuyên gia giàu kinh nghiệm"
-          />
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Chuyên Khoa Y Tế</h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Khám phá các chuyên khoa đa dạng với đội ngũ bác sĩ chuyên gia giàu kinh nghiệm
+            </p>
+          </div>
         </Container>
       </Section>
 
@@ -112,14 +127,14 @@ export function SpecialistsPage() {
               {/* Results count */}
               <div className="mb-6">
                 <p className="text-gray-600">
-                  Tìm thấy <span className="font-semibold text-gray-900">{specialists.pagination.total}</span> chuyên khoa
+                  Tìm thấy <span className="font-semibold text-gray-900">{totalItems}</span> chuyên khoa
                 </p>
               </div>
 
               {/* Specialists Grid/List */}
               {viewMode === 'grid' ? (
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {specialists.data.map((specialist) => (
+                  {pagedData.map((specialist) => (
                     <SpecialistCard
                       key={specialist.id}
                       specialist={specialist}
@@ -129,7 +144,7 @@ export function SpecialistsPage() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {specialists.data.map((specialist) => (
+                  {pagedData.map((specialist) => (
                     <SpecialistCard
                       key={specialist.id}
                       specialist={specialist}
@@ -140,23 +155,25 @@ export function SpecialistsPage() {
               )}
 
               {/* Pagination */}
-              {specialists.pagination.totalPages > 1 && (
+              {totalPages > 1 && (
                 <div className="mt-12 flex justify-center">
                   <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
                     <div className="flex items-center gap-2">
                       <button
-                        disabled={!specialists.pagination.hasPrev}
+                        disabled={page <= 1}
+                        onClick={() => setPage(prev => Math.max(1, prev - 1))}
                         className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Trước
                       </button>
                       
                       <div className="flex items-center gap-1">
-                        {Array.from({ length: specialists.pagination.totalPages }, (_, i) => i + 1).map((page) => (
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                           <button
                             key={page}
+                            onClick={() => setPage(page)}
                             className={`w-10 h-10 text-sm font-medium rounded-xl transition-colors ${
-                              page === specialists.pagination.page
+                              page === currentPage
                                 ? 'bg-blue-600 text-white'
                                 : 'text-gray-600 hover:bg-gray-100'
                             }`}
@@ -167,7 +184,8 @@ export function SpecialistsPage() {
                       </div>
                       
                       <button
-                        disabled={!specialists.pagination.hasNext}
+                        disabled={page >= totalPages}
+                        onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
                         className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Sau

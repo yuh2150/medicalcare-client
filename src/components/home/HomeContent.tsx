@@ -116,8 +116,11 @@ export function HomeContent() {
         background="white"
       >
         {data && data.featuredSpecialists.length > 0 ? (
-          data.featuredSpecialists.map((specialist) => (
-            <SpecialistCard key={specialist.id} specialist={specialist} />
+          data.featuredSpecialists.map((specialist, index) => (
+            <SpecialistCard
+              key={specialist.id ?? specialist._id ?? specialist.slug ?? `${specialist.name}-${index}`}
+              specialist={specialist}
+            />
           ))
         ) : (
           <div className="col-span-full text-center text-gray-500 py-12">
@@ -135,8 +138,11 @@ export function HomeContent() {
         subtitle="Các chuyên gia y tế giàu kinh nghiệm tận tâm vì sức khỏe của bạn"
       >
         {data && data.featuredDoctors.length > 0 ? (
-          data.featuredDoctors.map((doctor) => (
-            <DoctorCard key={doctor.id} doctor={doctor} />
+          data.featuredDoctors.map((doctor, index) => (
+            <DoctorCard
+              key={doctor.id ?? doctor._id ?? `${doctor.name}-${index}`}
+              doctor={doctor}
+            />
           ))
         ) : (
           <div className="col-span-full text-center text-gray-500 py-12">

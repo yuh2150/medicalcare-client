@@ -50,13 +50,13 @@ export function SpecialistCard({ specialist, viewMode = 'grid' }: SpecialistCard
             {/* Icon/Image */}
             <div className="shrink-0">
               {(specialist.image || specialist.thumbnail) ? (
-                <div className="w-16 h-16 rounded-2xl overflow-hidden">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden bg-blue-50 p-2">
                   <Image
                     src={specialist.image || specialist.thumbnail || ''}
                     alt={specialist.name}
                     width={64}
                     height={64}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
               ) : (
@@ -104,12 +104,14 @@ export function SpecialistCard({ specialist, viewMode = 'grid' }: SpecialistCard
         {/* Image/Icon Header */}
         <div className="relative h-48 bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center">
           {(specialist.image || specialist.thumbnail) ? (
-            <Image
-              src={specialist.image || specialist.thumbnail || ''}
-              alt={specialist.name}
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            <div className="absolute inset-0 p-6">
+              <Image
+                src={specialist.image || specialist.thumbnail || ''}
+                alt={specialist.name}
+                fill
+                className="object-contain group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
           ) : (
             <div className="text-6xl opacity-80 group-hover:scale-110 transition-transform duration-300">
               {getSpecialtyIcon(specialist.name)}

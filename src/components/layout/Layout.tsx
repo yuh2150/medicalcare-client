@@ -211,32 +211,21 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items, className = '' }: BreadcrumbProps) {
   return (
     <nav className={`flex ${className}`} aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2">
+      <ol className="flex flex-wrap items-center gap-2 text-sm">
         {items.map((item, index) => (
-          <li key={index} className="flex items-center">
-            {index > 0 && (
-              <svg
-                className="shrink-0 h-4 w-4 text-gray-400 mx-2"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                aria-hidden="true"
-              >
-                <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-              </svg>
-            )}
+          <li key={index} className="flex items-center gap-2">
+            {index > 0 && <span className="text-gray-300">/</span>}
             {item.href && !item.current ? (
               <a
                 href={item.href}
-                className="text-sm font-medium text-gray-500 hover:text-gray-700"
+                className="font-medium text-gray-500 hover:text-gray-700"
               >
                 {item.label}
               </a>
             ) : (
               <span
-                className={`text-sm font-medium ${
-                  item.current ? 'text-gray-900' : 'text-gray-500'
-                }`}
+                className={`font-medium ${item.current ? 'text-gray-900' : 'text-gray-500'}`}
+                aria-current={item.current ? 'page' : undefined}
               >
                 {item.label}
               </span>

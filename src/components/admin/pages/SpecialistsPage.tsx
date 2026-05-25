@@ -458,7 +458,7 @@ const SpecialtyModal: React.FC<SpecialtyModalProps> = ({ specialty, onClose, onS
                 <span className="text-gray-500 text-xs ml-1">(tối đa 500 ký tự)</span>
               </label>
               <input
-                type="url"
+                type="text"
                 maxLength={500}
                 value={formData.image}
                 onChange={(e) => {
